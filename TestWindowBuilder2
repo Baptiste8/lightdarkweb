@@ -1,0 +1,103 @@
+package testwindowbuilder;
+
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JComboBox;
+import javax.swing.JTree;
+import javax.swing.JSeparator;
+import javax.swing.JLabel;
+import javax.swing.JTabbedPane;
+import javax.swing.JLayeredPane;
+import javax.swing.JList;
+import javax.swing.JTable;
+import javax.swing.JSpinner;
+import java.awt.Canvas;
+import java.awt.Choice;
+import java.awt.List;
+import javax.swing.JTextField;
+import java.awt.Button;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+public class testwindowbuiler2 {
+
+	private JFrame frame;
+	private JTextField textField;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					testwindowbuiler2 window = new testwindowbuiler2();
+					window.frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the application.
+	 */
+	public testwindowbuiler2() {
+		initialize();
+	}
+
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	private void initialize() {
+		frame = new JFrame();
+		frame.setBounds(100, 100, 679, 518);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().setLayout(null);
+		
+		JLabel lblTheGoodPlace = new JLabel("The Good Place");
+		lblTheGoodPlace.setBounds(312, 11, 80, 14);
+		frame.getContentPane().add(lblTheGoodPlace);
+		
+		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane.setBounds(32, 50, 603, 386);
+		frame.getContentPane().add(tabbedPane);
+		
+		JLayeredPane layeredPane = new JLayeredPane();
+		tabbedPane.addTab("Acheter", null, layeredPane, null);
+		layeredPane.setLayout(null);
+		
+		List list = new List();
+		list.setBounds(27, 42, 561, 281);
+		layeredPane.add(list);
+		
+		JLabel lblNewLabel = new JLabel("Rechercher : ");
+		lblNewLabel.setBounds(27, 22, 73, 14);
+		layeredPane.add(lblNewLabel);
+		
+		textField = new JTextField();
+		textField.setBounds(97, 16, 86, 20);
+		layeredPane.add(textField);
+		textField.setColumns(10);
+		
+		Button button = new Button("Filtres");
+		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		button.setBounds(505, 14, 70, 22);
+		layeredPane.add(button);
+		
+		JLayeredPane layeredPane_1 = new JLayeredPane();
+		tabbedPane.addTab("Vendre", null, layeredPane_1, null);
+		
+		JTabbedPane tabbedPane_1 = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane.addTab("Information", null, tabbedPane_1, null);
+		
+		JSeparator separator = new JSeparator();
+		separator.setBounds(32, 37, 603, 2);
+		frame.getContentPane().add(separator);
+	}
+}
