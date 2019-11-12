@@ -1,0 +1,75 @@
+package Modele;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.util.ArrayList;
+
+public class BDD implements Serializable{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	private static ArrayList<Annonce> annonces;
+	
+	BDD(){};
+	
+	public static ArrayList<Annonce> getAnnonces(){
+		return annonces;
+	}
+	
+	public static void addAnnonce(Annonce ann){
+		BDD.getAnnonces().add(ann);
+	}
+	
+	public static void deleteAnnonce(String idAnnonce){
+		for(Annonce ann : BDD.getAnnonces()) {
+			if (ann.getId().equals(idAnnonce)){
+				BDD.getAnnonces().remove(ann);
+			}
+		}
+	}
+	
+	public static void changeAnnonce(String idAnnonce,String nvname, String nvdescription, float nvprix){
+		for(Annonce ann : BDD.getAnnonces()) {
+			if (ann.getId().equals(idAnnonce)){
+				ann.setName(nvname);
+				ann.setDescription(nvdescription);
+				ann.setPrix(nvprix);
+			}
+		}
+	}
+	
+	public void sauvegarde() throws IOException{
+		File fichier =  new File("tmp/marin.ser") ;
+
+		 // ouverture d'un flux sur un fichier
+		ObjectOutputStream oos =  new ObjectOutputStream(new FileOutputStream(fichier)) ;
+
+		 // sérialization de l'objet
+		oos.writeObject(this) ;
+	}
+	
+	public BDD update() throws FileNotFoundException, IOException, ClassNotFoundException{
+
+
+		// dans une méthode main
+		 // on simplifie le code en retirant la gestion des exceptions
+		File fichier =  new File("tmp/marin.ser") ;
+
+		 // ouverture d'un flux sur un fichier
+		ObjectInputStream ois =  new ObjectInputStream(new FileInputStream(fichier)) ;
+				
+		 // désérialization de l'objet
+		BDD m = (BDD)ois.readObject() ;
+		return m;
+
+		 // fermeture du flux dans le bloc finally
+	}
+}
