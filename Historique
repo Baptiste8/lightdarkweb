@@ -1,0 +1,65 @@
+import java.io.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+// La classe est finale, car un singleton n'est pas censé avoir d'héritier.
+public final class Historique {
+
+	// L'utilisation du mot clé volatile, en Java version 5 et supérieure,
+	// permet d'éviter le cas où "Singleton.instance" est non nul,
+	// mais pas encore "réellement" instancié.
+	private static volatile Historique instance = null;
+
+	// D'autres attributs, classiques et non "static".TODO
+	final String chemin="E:/test.txt";
+
+	/**
+	 * Constructeur de l'objet.
+	 */
+	private Historique() {
+		// La présence d'un constructeur privé supprime le constructeur public par défaut.
+		// De plus, seul le singleton peut s'instancier lui-même.
+		super();
+	}
+
+	/**
+	 * Méthode permettant de renvoyer une instance de la classe Singleton
+	 * @return Retourne l'instance du singleton.
+	 */
+	public final static Historique getInstance() {
+		//Le "Double-Checked Singleton"/"Singleton doublement vérifié" permet 
+		//d'éviter un appel coûteux à synchronized, 
+		//une fois que l'instanciation est faite.
+		if (Historique.instance == null) {
+			// Le mot-clé synchronized sur ce bloc empêche toute instanciation
+			// multiple même par différents "threads".
+			// Il est TRES important.
+			synchronized(Historique.class) {
+				if (Historique.instance == null) {
+					Historique.instance = new Historique();
+				}
+			}
+		}
+		return Historique.instance;
+	}
+
+	public void warning() {
+		//TODO
+
+	}
+
+	public void connexion(String utilisateur) {
+		Date maDate = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
+		SimpleDateFormat sdh = new SimpleDateFormat("hh:mm");
+		String content = "L'utilisateur "+utilisateur+" s'est connecté au serveur le "+sdf.format(maDate)+" à "+sdh.format(maDate);
+		try(FileWriter fw = new FileWriter(chemin, true);
+				BufferedWriter bw = new BufferedWriter(fw);
+				PrintWriter out = new PrintWriter(bw))
+				{
+			out.println(content);
+				}
+		catch (IOException e)
+		{
+			//Gestion des exceptions en cas de problème d'accès au fichier
+		}
+	}
