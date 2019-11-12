@@ -1,0 +1,10 @@
+package Modele;
+
+public class APIBank {
+
+	public static void ProcedureBanq() {
+		// TODO Auto-generated method stub
+		
+	}
+
+}
