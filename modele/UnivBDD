@@ -1,0 +1,10 @@
+package Modele;
+
+public class UnivBDD {
+
+	public static boolean connect() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+}
