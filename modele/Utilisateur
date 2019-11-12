@@ -1,0 +1,54 @@
+package Modele;
+
+import java.util.ArrayList;
+
+public class Utilisateur {
+	
+	private String num_Etu;
+	private UserState state;
+	private boolean connected;
+	private String password;
+	private String pseudo;
+	private String email;
+	
+	Utilisateur(String num_Etu){
+		this.num_Etu = num_Etu;
+		this.connected = false;
+	}
+	
+	Utilisateur(String num_Etu, String password, String pseudo){
+		this.num_Etu = num_Etu;
+		if(UnivBDD.connect() == true){
+			this.connected = true;
+			this.password = password;
+			this.pseudo = pseudo;
+		}
+		else {System.err.println("Erreur de connexion\n");}
+	}
+	
+	public ArrayList<Annonce> recherche(String Filtre){
+		ArrayList<Annonce> res = new ArrayList<Annonce>();
+		for(Annonce ann : BDD.getAnnonces()) {
+			if(ann.getName().contains(Filtre) && ann.getDescription().contains(Filtre)){
+				res.add(ann);
+			}
+		}
+		return res;
+	}
+	
+	public void identification(String num_Etu, String password, String pseudo){
+		new Utilisateur(num_Etu,password,pseudo);
+	}
+	
+	public void acheter(String idAnnonce){
+		APIBank.ProcedureBanq();
+	}
+	
+	public void supprimerAnnonce(String idAnnonce){
+		BDD.deleteAnnonce(idAnnonce);
+	}
+	
+	public void modifierAnnonce(String idAnnonce,String nvname, String nvdescription, float nvprix){
+		BDD.changeAnnonce(idAnnonce, nvname, nvdescription, nvprix);
+	}
+}
