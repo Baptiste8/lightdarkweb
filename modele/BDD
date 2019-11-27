@@ -1,4 +1,4 @@
-package Modele;
+package src;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class BDD implements Serializable{
 	
@@ -16,28 +16,30 @@ public class BDD implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private static ArrayList<Annonce> annonces;
+	private  CopyOnWriteArrayList<Annonce> annonces;
 	
-	BDD(){};
+	BDD(){
+		annonces = new CopyOnWriteArrayList<Annonce> ();
+	};
 	
-	public static ArrayList<Annonce> getAnnonces(){
+	public CopyOnWriteArrayList<Annonce> getAnnonces(){
 		return annonces;
 	}
 	
-	public static void addAnnonce(Annonce ann){
-		BDD.getAnnonces().add(ann);
+	public void addAnnonce(Annonce ann){
+		this.getAnnonces().add(ann);
 	}
 	
-	public static void deleteAnnonce(String idAnnonce){
-		for(Annonce ann : BDD.getAnnonces()) {
-			if (ann.getId().equals(idAnnonce)){
-				BDD.getAnnonces().remove(ann);
-			}
+	public void deleteAnnonce(String idAnnonce){
+		for (Annonce s : annonces) {
+		    if (s.getId().equals(idAnnonce)) {
+		    	annonces.remove(s);
+		    }
 		}
 	}
 	
-	public static void changeAnnonce(String idAnnonce,String nvname, String nvdescription, float nvprix){
-		for(Annonce ann : BDD.getAnnonces()) {
+	public void changeAnnonce(String idAnnonce,String nvname, String nvdescription, float nvprix){
+		for(Annonce ann : this.getAnnonces()) {
 			if (ann.getId().equals(idAnnonce)){
 				ann.setName(nvname);
 				ann.setDescription(nvdescription);
@@ -47,7 +49,7 @@ public class BDD implements Serializable{
 	}
 	
 	public void sauvegarde() throws IOException{
-		File fichier =  new File("tmp/marin.ser") ;
+		File fichier =  new File("D:/Users/jacqueba/Bureau/TestJUnit/src/sauvAnnonce.txt") ;
 
 		 // ouverture d'un flux sur un fichier
 		ObjectOutputStream oos =  new ObjectOutputStream(new FileOutputStream(fichier)) ;
@@ -61,7 +63,7 @@ public class BDD implements Serializable{
 
 		// dans une méthode main
 		 // on simplifie le code en retirant la gestion des exceptions
-		File fichier =  new File("tmp/marin.ser") ;
+		File fichier =  new File("D:/Users/jacqueba/Bureau/TestJUnit/src/sauvAnnonce.txt") ;
 
 		 // ouverture d'un flux sur un fichier
 		ObjectInputStream ois =  new ObjectInputStream(new FileInputStream(fichier)) ;
