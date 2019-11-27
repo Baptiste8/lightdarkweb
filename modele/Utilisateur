@@ -1,34 +1,42 @@
-package Modele;
+package src;
 
 import java.util.ArrayList;
 
 public class Utilisateur {
 	
 	private String num_Etu;
-	private UserState state;
 	private boolean connected;
 	private String password;
 	private String pseudo;
-	private String email;
+	private BDD bdd;
 	
 	Utilisateur(String num_Etu){
 		this.num_Etu = num_Etu;
 		this.connected = false;
 	}
 	
-	Utilisateur(String num_Etu, String password, String pseudo){
+	Utilisateur(String num_Etu, String password, String pseudo,BDD bdd, boolean droitAdmin){
 		this.num_Etu = num_Etu;
-		if(UnivBDD.connect() == true){
+		if(UnivBDD.connect(num_Etu, password) == true || droitAdmin){
 			this.connected = true;
 			this.password = password;
 			this.pseudo = pseudo;
+			this.bdd = bdd;
 		}
 		else {System.err.println("Erreur de connexion\n");}
 	}
 	
+	public boolean isConnected() {
+		return connected;
+	}
+
+	public void setConnected(boolean connected) {
+		this.connected = connected;
+	}
+
 	public ArrayList<Annonce> recherche(String Filtre){
 		ArrayList<Annonce> res = new ArrayList<Annonce>();
-		for(Annonce ann : BDD.getAnnonces()) {
+		for(Annonce ann : bdd.getAnnonces()) {
 			if(ann.getName().contains(Filtre) && ann.getDescription().contains(Filtre)){
 				res.add(ann);
 			}
@@ -37,7 +45,7 @@ public class Utilisateur {
 	}
 	
 	public void identification(String num_Etu, String password, String pseudo){
-		new Utilisateur(num_Etu,password,pseudo);
+		new Utilisateur(num_Etu,password,pseudo,bdd,false);
 	}
 	
 	public void acheter(String idAnnonce){
@@ -45,10 +53,41 @@ public class Utilisateur {
 	}
 	
 	public void supprimerAnnonce(String idAnnonce){
-		BDD.deleteAnnonce(idAnnonce);
+		bdd.deleteAnnonce(idAnnonce);
 	}
 	
 	public void modifierAnnonce(String idAnnonce,String nvname, String nvdescription, float nvprix){
-		BDD.changeAnnonce(idAnnonce, nvname, nvdescription, nvprix);
+		bdd.changeAnnonce(idAnnonce, nvname, nvdescription, nvprix);
+	}
+	
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	@Override
+	public String toString() {
+		return "Utilisateur [num_Etu=" + num_Etu + ", connected=" + connected
+				+ ", password=" + password + ", pseudo=" + pseudo + ", bdd="
+				+ bdd + "]";
+	}
+
+	public String getPseudo() {
+		return pseudo;
+	}
+
+	public void setPseudo(String pseudo) {
+		this.pseudo = pseudo;
+	}
+
+	public void setNum_Etu(String num_Etu) {
+		this.num_Etu = num_Etu;
+	}
+
+	public String getNum_Etu(){
+		return this.num_Etu;
 	}
 }
