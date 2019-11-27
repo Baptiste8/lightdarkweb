@@ -1,4 +1,4 @@
-package Modele;
+package src;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
