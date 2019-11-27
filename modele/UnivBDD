@@ -1,10 +1,102 @@
-package Modele;
+package src;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.util.concurrent.CopyOnWriteArrayList;
 
-public class UnivBDD {
+public class UnivBDD implements Serializable{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	private static CopyOnWriteArrayList<Utilisateur> comptes;
+	
+	UnivBDD(){
+		comptes = new CopyOnWriteArrayList<Utilisateur> ();
+	};
+	
+	public CopyOnWriteArrayList<Utilisateur> getCompte(){
+		return comptes;
+	}
+	
+	public void addCompte(Utilisateur ann){
+		this.getCompte().add(ann);
+	}
+	
+	public void deleteCompte(String num_Etu){
+		for (Utilisateur s : comptes) {
+		    if (s.getNum_Etu().equals(num_Etu)) {
+		    	comptes.remove(s);
+		    }
+		}
+	}
+	
+	public Utilisateur getCompte(String num_Etu){
+		for(Utilisateur ann : this.getCompte()) {
+			if (ann.getNum_Etu().equals(num_Etu)){
+				return ann;
+			}
+		}
+		return null;
+	}
+	public void changeCompte(String num_Etu,String password, String pseudo){
+		for(Utilisateur ann : this.getCompte()) {
+			if (ann.getNum_Etu().equals(num_Etu)){
+				ann.setPassword(password);
+				ann.setPseudo(pseudo);
+			}
+		}
+	}
+	public void affiche(){
+		System.out.println("Nombre comptes : " +comptes.size());
+		for (Utilisateur u: this.getCompte() ){
+			System.out.println(u);
+		}
+	}
+	
+	public void sauvegarde() throws IOException{
+		File fichier =  new File("D:/Users/jacqueba/Bureau/TestJUnit/src/sauvCompte.txt") ;
 
-	public static boolean connect() {
-		// TODO Auto-generated method stub
-		return false;
+		 // ouverture d'un flux sur un fichier
+		ObjectOutputStream oos =  new ObjectOutputStream(new FileOutputStream(fichier)) ;
+
+		 // sérialization de l'objet
+		oos.writeObject(this) ;
+	}
+	
+	public UnivBDD update() throws FileNotFoundException, IOException, ClassNotFoundException{
+
+
+		// dans une méthode main
+		 // on simplifie le code en retirant la gestion des exceptions
+		File fichier =  new File("D:/Users/jacqueba/Bureau/TestJUnit/src/sauvCompte.txt") ;
+
+		 // ouverture d'un flux sur un fichier
+		ObjectInputStream ois =  new ObjectInputStream(new FileInputStream(fichier)) ;
+				
+		 // désérialization de l'objet
+		UnivBDD m = (UnivBDD)ois.readObject() ;
+		return m;
+
+		 // fermeture du flux dans le bloc finally
 	}
 
+	public static boolean connect(String num_Etu, String password) {
+		// TODO Auto-generated method stub
+		boolean bool = false;
+		for (Utilisateur s : comptes) {
+		    if ((s.getNum_Etu().equals(num_Etu)) && (s.getPassword().equals(password))) {
+		    	bool = true;
+		    }
+		}
+		return bool;
+	}
 }
+
