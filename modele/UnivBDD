@@ -1,4 +1,5 @@
-package src;
+package modele;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -18,12 +19,12 @@ public class UnivBDD implements Serializable{
 	
 	private static CopyOnWriteArrayList<Utilisateur> comptes;
 	
-	UnivBDD(){
-		comptes = new CopyOnWriteArrayList<Utilisateur> ();
+	public UnivBDD(){
+		setComptes(new CopyOnWriteArrayList<Utilisateur> ());
 	};
 	
 	public CopyOnWriteArrayList<Utilisateur> getCompte(){
-		return comptes;
+		return getComptes();
 	}
 	
 	public void addCompte(Utilisateur ann){
@@ -31,9 +32,9 @@ public class UnivBDD implements Serializable{
 	}
 	
 	public void deleteCompte(String num_Etu){
-		for (Utilisateur s : comptes) {
+		for (Utilisateur s : getComptes()) {
 		    if (s.getNum_Etu().equals(num_Etu)) {
-		    	comptes.remove(s);
+		    	getComptes().remove(s);
 		    }
 		}
 	}
@@ -55,14 +56,15 @@ public class UnivBDD implements Serializable{
 		}
 	}
 	public void affiche(){
-		System.out.println("Nombre comptes : " +comptes.size());
+		System.out.println("Nombre comptes : " +getComptes().size());
 		for (Utilisateur u: this.getCompte() ){
 			System.out.println(u);
 		}
 	}
 	
 	public void sauvegarde() throws IOException{
-		File fichier =  new File("D:/Users/jacqueba/Bureau/TestJUnit/src/sauvCompte.txt") ;
+		String userHome = System.getProperty("user.home");
+		File fichier =  new File(userHome+"/Desktop/Projet_INFO742/saveUnivBDD.txt");
 
 		 // ouverture d'un flux sur un fichier
 		ObjectOutputStream oos =  new ObjectOutputStream(new FileOutputStream(fichier)) ;
@@ -76,7 +78,8 @@ public class UnivBDD implements Serializable{
 
 		// dans une méthode main
 		 // on simplifie le code en retirant la gestion des exceptions
-		File fichier =  new File("D:/Users/jacqueba/Bureau/TestJUnit/src/sauvCompte.txt") ;
+		String userHome = System.getProperty("user.home");
+		File fichier =  new File(userHome+"/Desktop/Projet_INFO742/saveUnivBDD.txt");
 
 		 // ouverture d'un flux sur un fichier
 		ObjectInputStream ois =  new ObjectInputStream(new FileInputStream(fichier)) ;
@@ -91,12 +94,19 @@ public class UnivBDD implements Serializable{
 	public static boolean connect(String num_Etu, String password) {
 		// TODO Auto-generated method stub
 		boolean bool = false;
-		for (Utilisateur s : comptes) {
+		for (Utilisateur s : getComptes()) {
 		    if ((s.getNum_Etu().equals(num_Etu)) && (s.getPassword().equals(password))) {
 		    	bool = true;
 		    }
 		}
 		return bool;
 	}
-}
 
+	public static CopyOnWriteArrayList<Utilisateur> getComptes() {
+		return comptes;
+	}
+
+	public static void setComptes(CopyOnWriteArrayList<Utilisateur> comptes) {
+		UnivBDD.comptes = comptes;
+	}
+}
