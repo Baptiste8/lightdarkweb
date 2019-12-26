@@ -1,0 +1,27 @@
+package Installation;
+
+import java.io.File;
+import java.io.IOException;
+
+import modele.Annonce;
+import modele.BDD;
+import modele.UnivBDD;
+import modele.Utilisateur;
+
+public class Setup {
+	protected Utilisateur utilisateur;
+	protected Annonce annonce;
+	protected UnivBDD univbdd;
+	protected BDD bdd;
+	
+	public static void main(String[] args) throws IOException, ClassNotFoundException{
+		String userHome = System.getProperty("user.home");
+		File dir = new File(userHome+"/Desktop/Projet_INFO742");
+		
+		if(!dir.isFile()) {
+			dir.mkdirs();
+			InitData.actived();
+		}
+	}
+
+}
