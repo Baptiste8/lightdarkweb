@@ -1,4 +1,4 @@
-package src;
+package modele;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -18,7 +18,7 @@ public class BDD implements Serializable{
 	
 	private  CopyOnWriteArrayList<Annonce> annonces;
 	
-	BDD(){
+	public BDD(){
 		annonces = new CopyOnWriteArrayList<Annonce> ();
 	};
 	
@@ -48,8 +48,9 @@ public class BDD implements Serializable{
 		}
 	}
 	
-	public void sauvegarde() throws IOException{
-		File fichier =  new File("D:/Users/jacqueba/Bureau/TestJUnit/src/sauvAnnonce.txt") ;
+	public void sauvegarde(String bdd) throws IOException{
+		String userHome = System.getProperty("user.home");
+		File fichier =  new File(userHome+"/Desktop/Projet_INFO742/"+bdd+".txt");
 
 		 // ouverture d'un flux sur un fichier
 		ObjectOutputStream oos =  new ObjectOutputStream(new FileOutputStream(fichier)) ;
@@ -58,12 +59,13 @@ public class BDD implements Serializable{
 		oos.writeObject(this) ;
 	}
 	
-	public BDD update() throws FileNotFoundException, IOException, ClassNotFoundException{
+	public BDD update(String bdd) throws FileNotFoundException, IOException, ClassNotFoundException{
 
 
 		// dans une méthode main
 		 // on simplifie le code en retirant la gestion des exceptions
-		File fichier =  new File("D:/Users/jacqueba/Bureau/TestJUnit/src/sauvAnnonce.txt") ;
+		String userHome = System.getProperty("user.home");
+		File fichier =  new File(userHome+"/Desktop/Projet_INFO742/"+bdd+".txt");
 
 		 // ouverture d'un flux sur un fichier
 		ObjectInputStream ois =  new ObjectInputStream(new FileInputStream(fichier)) ;
