@@ -1,0 +1,31 @@
+package main;
+
+import java.awt.EventQueue;
+import java.io.IOException;
+
+import Installation.Setup;
+import vue.ConnexionFrame;
+
+public class Launcher {
+	
+	public static void main(String[] args) {
+		try {
+			Setup.main(null);
+		} catch (ClassNotFoundException | IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					ConnexionFrame frame = new ConnexionFrame();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+}
