@@ -1,0 +1,42 @@
+package modele;
+
+public class Logement extends Annonce{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	public Logement(String id,String name,String description, float prix){
+		super(id, name, description, prix);
+	}
+	
+	public String getId(){
+		return this.id;
+	}
+	
+	public String getName(){
+		return this.name;
+	}
+	
+	public String getDescription(){
+		return this.description;
+	}
+	
+	public float getPrix(){
+		return this.prix;
+	}
+	
+	public void setName(String name){
+		this.name = name;
+	}
+	
+	public void setDescription(String description){
+		this.description = description;
+	}
+	
+	public void setPrix(float prix){
+		this.prix = prix;
+	}
+
+}
