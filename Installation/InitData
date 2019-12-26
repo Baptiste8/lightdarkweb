@@ -1,0 +1,90 @@
+package Installation;
+
+import java.io.IOException;
+
+import modele.Annonce;
+import modele.BDD;
+import modele.Logement;
+import modele.Service;
+import modele.UnivBDD;
+import modele.Utilisateur;
+
+public class InitData {
+	
+	InitData(){}
+
+	public static void actived() throws IOException, ClassNotFoundException {
+		
+		BDD bdd1 = new BDD();
+		BDD bdd2 = new BDD();
+		BDD bdd3 = new BDD();
+		BDD bdd4 = new BDD();
+		BDD bdd5 = new BDD();
+		BDD bdd6 = new BDD();
+		BDD bdd7 = new BDD();
+		BDD bdd8 = new BDD();
+		BDD bdd9 = new BDD();
+		BDD bdd10 = new BDD();
+		
+		Utilisateur utilisateur1 = new Utilisateur("0001","mdp","Pseudo",bdd1,true);
+		Utilisateur utilisateur2 = new Utilisateur("0002","mdp","Pseudo",bdd2,false);
+		Utilisateur utilisateur3 = new Utilisateur("0003","mdp","Pseudo",bdd3,false);
+		Utilisateur utilisateur4 = new Utilisateur("0004","mdp","Pseudo",bdd4,false);
+		Utilisateur utilisateur5 = new Utilisateur("0005","mdp","Pseudo",bdd5,false);
+		Utilisateur utilisateur6 = new Utilisateur("0006","mdp","Pseudo",bdd6,false);
+		Utilisateur utilisateur7 = new Utilisateur("0007","mdp","Pseudo",bdd7,false);
+		Utilisateur utilisateur8 = new Utilisateur("0008","mdp","Pseudo",bdd8,false);
+		Utilisateur utilisateur9 = new Utilisateur("0009","mdp","Pseudo",bdd9,false);
+		Utilisateur utilisateur10 = new Utilisateur("0010","mdp","Pseudo",bdd10,false);
+		
+		UnivBDD univbdd = new UnivBDD();
+		
+		univbdd.addCompte(utilisateur1);
+		univbdd.addCompte(utilisateur2);
+		univbdd.addCompte(utilisateur3);
+		univbdd.addCompte(utilisateur4);
+		univbdd.addCompte(utilisateur5);
+		univbdd.addCompte(utilisateur6);
+		univbdd.addCompte(utilisateur7);
+		univbdd.addCompte(utilisateur8);
+		univbdd.addCompte(utilisateur9);
+		univbdd.addCompte(utilisateur10);
+		
+		Annonce annonce1 = new Logement("0001","Annonce de Logement1","Appartement au bord de la mer",100000.0f);
+		Annonce annonce2 = new Logement("0002","Annonce de Logement2","Chalet",650000.0f);
+		Annonce annonce3 = new Logement("0003","Annonce de Logement3","Studio",10000.0f);
+		Annonce annonce4 = new Logement("0004","Annonce de Logement4","Appartement etudiant",9000.0f);
+		
+		Annonce annonce5 = new Service("0005","Cours de Math","Cours de Math du college au superieur",10.0f, "par cours");
+		Annonce annonce6 = new Service("0006","Offre de repas","Repas a partager",3.0f, "par repas");
+		Annonce annonce7 = new Service("0007","Offre de menage","Offre ses service pour faire le ménage chez vous",8.0f, "par heure");
+		
+		bdd1.addAnnonce(annonce1);
+		bdd2.addAnnonce(annonce2);
+		bdd3.addAnnonce(annonce3);
+		bdd4.addAnnonce(annonce4);
+		bdd5.addAnnonce(annonce5);
+		bdd6.addAnnonce(annonce6);
+		bdd7.addAnnonce(annonce7);
+		
+		bdd1.sauvegarde("bdd1");
+		bdd2.sauvegarde("bdd2");
+		bdd3.sauvegarde("bdd3");
+		bdd4.sauvegarde("bdd4");
+		bdd5.sauvegarde("bdd5");
+		bdd6.sauvegarde("bdd6");
+		bdd7.sauvegarde("bdd7");
+		bdd8.sauvegarde("bdd8");
+		bdd9.sauvegarde("bdd9");
+		bdd10.sauvegarde("bdd10");
+		
+		bdd1.update("bdd1");
+		bdd2.update("bdd2");
+		bdd3.update("bdd3");
+		bdd4.update("bdd4");
+		bdd5.update("bdd5");
+		bdd6.update("bdd6");
+		bdd7.update("bdd7");
+	}
+
+}
