@@ -1,4 +1,4 @@
-package src;
+package modele;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -11,10 +11,10 @@ public abstract class Annonce implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private String id;
-	private String name;
-	private String description;
-	private float prix;
+	protected String id;
+	protected String name;
+	protected String description;
+	protected float prix;
 	
 	Annonce(String id,String name,String description, float prix){
 		this.id = id;
