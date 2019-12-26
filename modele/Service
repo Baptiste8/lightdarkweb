@@ -1,0 +1,11 @@
+package modele;
+
+public class Service extends Annonce{
+	
+	private String duree;
+
+	public Service(String id,String name,String description, float prix, String duree){
+		super(id, name, description, prix);
+		this.duree = duree;
+	}
+}
