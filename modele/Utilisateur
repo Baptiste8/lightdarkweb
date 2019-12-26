@@ -1,4 +1,4 @@
-package src;
+package modele;
 
 import java.util.ArrayList;
 
@@ -10,20 +10,25 @@ public class Utilisateur {
 	private String pseudo;
 	private BDD bdd;
 	
+	public BDD getBdd() {
+		return bdd;
+	}
+
+	public void setBdd(BDD bdd) {
+		this.bdd = bdd;
+	}
+
 	Utilisateur(String num_Etu){
 		this.num_Etu = num_Etu;
 		this.connected = false;
 	}
 	
-	Utilisateur(String num_Etu, String password, String pseudo,BDD bdd, boolean droitAdmin){
+	public Utilisateur(String num_Etu, String password, String pseudo,BDD bddPerso, boolean droitAdmin){
 		this.num_Etu = num_Etu;
-		if(UnivBDD.connect(num_Etu, password) == true || droitAdmin){
-			this.connected = true;
-			this.password = password;
-			this.pseudo = pseudo;
-			this.bdd = bdd;
-		}
-		else {System.err.println("Erreur de connexion\n");}
+		this.connected = true;
+		this.password = password;
+		this.pseudo = pseudo;
+		this.bdd = bddPerso;
 	}
 	
 	public boolean isConnected() {
