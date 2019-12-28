@@ -1,0 +1,32 @@
+package classesObservation;
+
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+
+public class Observable{
+
+		public Observable() {
+			m_observateurs = new LinkedList<Observateur>();
+		}
+		
+		public void notifierObservateurs(){
+		   Iterator<Observateur> it = m_observateurs.iterator();
+		    // Notifier tous les observateurs
+		   while(it.hasNext()){
+			   Observateur obs = it.next();
+			   obs.notifier();
+		   }
+		}
+		
+		public void ajouterObservateur(Observateur obs){
+		    m_observateurs.add(obs);
+		}
+		
+		void supprimerObservateur(Observateur observateur){
+
+		    m_observateurs.remove(observateur);
+		}
+		
+		private List<Observateur> m_observateurs;
+	}
