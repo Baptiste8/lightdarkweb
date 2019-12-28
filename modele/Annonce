@@ -1,15 +1,13 @@
 package modele;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
+
+/*La classe Annonce est une classe abstract fait à partir du patron
+ * Stratégie. Elle permet de factoriser l'ensemble du code qui est commun
+ * à toutes les annonces (notamment les Getteurs et Setteurs)*/
 
 public abstract class Annonce implements Serializable{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	protected String id;
 	protected String name;
