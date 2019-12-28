@@ -1,3 +1,4 @@
+package modele;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -10,12 +11,13 @@ public final class Historique {
 	private static volatile Historique instance = null;
 
 	// D'autres attributs, classiques et non "static".TODO
-	final String chemin="E:/test.txt";
+	String userHome = System.getProperty("user.home");
+	String chemin = userHome+"/Desktop/Projet_INFO742/Historique.txt";
 
 	/**
 	 * Constructeur de l'objet.
 	 */
-	private Historique() {
+	Historique() {
 		// La présence d'un constructeur privé supprime le constructeur public par défaut.
 		// De plus, seul le singleton peut s'instancier lui-même.
 		super();
@@ -55,11 +57,11 @@ public final class Historique {
 		try(FileWriter fw = new FileWriter(chemin, true);
 				BufferedWriter bw = new BufferedWriter(fw);
 				PrintWriter out = new PrintWriter(bw))
-				{
+		{
 			out.println(content);
-				}
+		}
 		catch (IOException e)
 		{
 			//Gestion des exceptions en cas de problème d'accès au fichier
 		}
-	}
+	}}
