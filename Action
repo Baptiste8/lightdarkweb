@@ -1,0 +1,79 @@
+package vue;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+
+import classesObservation.Observable;
+import modele.Annonce;
+import modele.BDD;
+import modele.Logement;
+import modele.UnivBDD;
+import modele.Utilisateur;
+
+public class Action extends Observable implements ActionListener {
+
+	Boolean changementFenetre = false;
+	private String fenetreActive="connexion";
+	private Utilisateur utilisateur_actif;
+
+	public Action() {
+
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		System.out.println(e.getActionCommand());
+		switch (e.getActionCommand()){
+
+		case "OKConnexion":
+			if (UnivBDD.connect(GestionFenetre.textField.getText(), GestionFenetre.textField_1.getText())) {
+				for(Utilisateur u : UnivBDD.comptes) {
+					if(u.getNum_Etu().equals(GestionFenetre.textField.getText())) {
+						utilisateur_actif = u;
+					}
+				}
+				fenetreActive = "principale";
+				changementFenetre = true;
+				this.notifierObservateurs();
+			}
+			break;
+
+		case "CreerVente":
+			fenetreActive = "creationVente";
+			changementFenetre = true;
+			this.notifierObservateurs();
+			break;
+
+		case "CANCEL":
+			fenetreActive = "principale";
+			changementFenetre = true;
+			this.notifierObservateurs();
+			break;
+
+		case "PUBLIER":
+			Logement l = new Logement(BDD.generateID(),GestionFenetre.textField.getText(),GestionFenetre.textArea.toString(),Float.parseFloat(GestionFenetre.textField_1.getText()));
+			BDD.addAnnonce(utilisateur_actif,l);
+			fenetreActive = "principale";
+			changementFenetre = true;
+			this.notifierObservateurs();
+			break;
+
+		case "Filtres":
+			BDD.reseach(GestionFenetre.textField.getText());
+			fenetreActive = "principale";
+			changementFenetre = true;
+			this.notifierObservateurs();
+			break;
+		}
+	}
+
+	public boolean getChangementFenetre() {
+		return this.changementFenetre;
+	}
+
+	public String getFenetre() {
+		return this.fenetreActive;
+	}
+
+}
