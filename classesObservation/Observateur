@@ -1,0 +1,5 @@
+package classesObservation;
+
+public interface Observateur {
+	public void notifier();
+}
