@@ -57,9 +57,9 @@ public final class Historique {
 		try(FileWriter fw = new FileWriter(chemin, true);
 				BufferedWriter bw = new BufferedWriter(fw);
 				PrintWriter out = new PrintWriter(bw))
-		{
+				{
 			out.println(content);
-		}
+				}
 		catch (IOException e)
 		{
 			//Gestion des exceptions en cas de problème d'accès au fichier
