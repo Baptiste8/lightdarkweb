@@ -8,19 +8,39 @@ import modele.BDD;
 import modele.UnivBDD;
 import modele.Utilisateur;
 
+/*Classe permettant de mettre en place l'architecture des fichiers de
+ * base de donnée si elle n'existe pas ainsi que de remplir les bases
+ * de données avec les valeurs par défault programmer dans la classe 
+ * InitData*/
+
 public class Setup {
+
 	protected Utilisateur utilisateur;
 	protected Annonce annonce;
 	protected UnivBDD univbdd;
-	protected BDD bdd;
-	
+	protected static BDD bdd;
+
 	public static void main(String[] args) throws IOException, ClassNotFoundException{
+		//Définition du chemin ou les données seront enregistrées
 		String userHome = System.getProperty("user.home");
-		File dir = new File(userHome+"/Desktop/Projet_INFO742");
-		
-		if(!dir.isFile()) {
-			dir.mkdirs();
+		File Rep = new File(userHome+"/Desktop/Projet_INFO742");
+		File dirBDD = new File(userHome+"/Desktop/Projet_INFO742/BDD");
+		File dirUnivBDD = new File(userHome+"/Desktop/Projet_INFO742/UnivBDD");
+
+		//Si les fichiers de données n'existent pas alors on les crée et rempli
+		if(!Rep.exists() || !dirBDD.exists() || !dirUnivBDD.exists()) {
+			dirBDD.mkdirs();
+			dirUnivBDD.mkdir();
 			InitData.actived();
+		} //InitData.actived();
+
+		//S'ils existent une versions lisibles des fichiers alors on les ajoute
+		
+		else {
+			BDD bdd = new BDD();
+			UnivBDD univbdd = new UnivBDD();
+			bdd.update();
+			univbdd.update();
 		}
 	}
 
