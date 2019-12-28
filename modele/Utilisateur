@@ -1,34 +1,31 @@
 package modele;
 
-import java.util.ArrayList;
+import java.io.Serializable;
 
-public class Utilisateur {
+/*La classe représent les utilisateur du logiciel avec un numéro étudiant
+ * deux booléan pour savoir si la personne est connectée ou si elle est administrateur.
+ * L'utilisateur possède aussi un mot de passe et un pseudo ainsi qu'une base de donnée personnelle
+ * ou l'ensemble de ses annonces sont enregistrées*/
+
+public class Utilisateur implements Serializable{
 	
+	private static final long serialVersionUID = -317694857632208975L;
 	private String num_Etu;
 	private boolean connected;
 	private String password;
 	private String pseudo;
-	private BDD bdd;
-	
-	public BDD getBdd() {
-		return bdd;
-	}
-
-	public void setBdd(BDD bdd) {
-		this.bdd = bdd;
-	}
+	private boolean droitAdmin;
 
 	Utilisateur(String num_Etu){
 		this.num_Etu = num_Etu;
 		this.connected = false;
 	}
 	
-	public Utilisateur(String num_Etu, String password, String pseudo,BDD bddPerso, boolean droitAdmin){
+	public Utilisateur(String num_Etu, String password, String pseudo, boolean droitAdmin){
 		this.num_Etu = num_Etu;
 		this.connected = true;
 		this.password = password;
 		this.pseudo = pseudo;
-		this.bdd = bddPerso;
 	}
 	
 	public boolean isConnected() {
@@ -38,31 +35,13 @@ public class Utilisateur {
 	public void setConnected(boolean connected) {
 		this.connected = connected;
 	}
-
-	public ArrayList<Annonce> recherche(String Filtre){
-		ArrayList<Annonce> res = new ArrayList<Annonce>();
-		for(Annonce ann : bdd.getAnnonces()) {
-			if(ann.getName().contains(Filtre) && ann.getDescription().contains(Filtre)){
-				res.add(ann);
-			}
-		}
-		return res;
-	}
 	
 	public void identification(String num_Etu, String password, String pseudo){
-		new Utilisateur(num_Etu,password,pseudo,bdd,false);
+		new Utilisateur(num_Etu,password,pseudo,false);
 	}
 	
 	public void acheter(String idAnnonce){
 		APIBank.ProcedureBanq();
-	}
-	
-	public void supprimerAnnonce(String idAnnonce){
-		bdd.deleteAnnonce(idAnnonce);
-	}
-	
-	public void modifierAnnonce(String idAnnonce,String nvname, String nvdescription, float nvprix){
-		bdd.changeAnnonce(idAnnonce, nvname, nvdescription, nvprix);
 	}
 	
 	public String getPassword() {
@@ -76,8 +55,7 @@ public class Utilisateur {
 	@Override
 	public String toString() {
 		return "Utilisateur [num_Etu=" + num_Etu + ", connected=" + connected
-				+ ", password=" + password + ", pseudo=" + pseudo + ", bdd="
-				+ bdd + "]";
+				+ ", password=" + password + ", pseudo=" + pseudo + "]";
 	}
 
 	public String getPseudo() {
@@ -95,4 +73,13 @@ public class Utilisateur {
 	public String getNum_Etu(){
 		return this.num_Etu;
 	}
+	
+	public boolean isDroitAdmin() {
+		return droitAdmin;
+	}
+
+	public void setDroitAdmin(boolean droitAdmin) {
+		this.droitAdmin = droitAdmin;
+	}
+
 }
