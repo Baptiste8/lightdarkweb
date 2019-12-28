@@ -1,5 +1,9 @@
 package modele;
 
+/*La classe Logement est une classe fille de la classe Annonce.
+ * Elle permet de mettre en évidence le fonctionnement  du patron
+ * Stratégie*/
+
 public class Logement extends Annonce{
 
 	/**
