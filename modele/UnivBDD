@@ -10,103 +10,127 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+/*La classe UnivBDD est une classe qui permet la manipulation
+ * et l'engistrement des comptes utilisateurs*/
+
 public class UnivBDD implements Serializable{
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	private static CopyOnWriteArrayList<Utilisateur> comptes;
-	
+
+	private static final long serialVersionUID = -8307048125234110661L;
+
+	public static CopyOnWriteArrayList<Utilisateur> comptes;
+
 	public UnivBDD(){
-		setComptes(new CopyOnWriteArrayList<Utilisateur> ());
+		comptes = new CopyOnWriteArrayList<Utilisateur> ();
+		Historique historique = new Historique(); //On utilise le Patron Singleton pour garder une trace des connexions
 	};
 	
-	public CopyOnWriteArrayList<Utilisateur> getCompte(){
-		return getComptes();
-	}
-	
+	//Méthode permettant d'ajouter un compte utilisateur
 	public void addCompte(Utilisateur ann){
-		this.getCompte().add(ann);
-	}
-	
-	public void deleteCompte(String num_Etu){
-		for (Utilisateur s : getComptes()) {
-		    if (s.getNum_Etu().equals(num_Etu)) {
-		    	getComptes().remove(s);
-		    }
+		this.getComptes().add(ann);
+		try {
+			sauvegarde();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
-	
+
+	//Méthode permettant de supprimer un compte utilisateur
+	public void deleteCompte(String num_Etu) throws ClassNotFoundException{
+		for (Utilisateur s : getComptes()) {
+			if (s.getNum_Etu().equals(num_Etu)) {
+				getComptes().remove(s);
+				try {
+					sauvegarde();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	public CopyOnWriteArrayList<Utilisateur> getComptes() {
+		return comptes;
+	}
+
 	public Utilisateur getCompte(String num_Etu){
-		for(Utilisateur ann : this.getCompte()) {
+		for(Utilisateur ann : this.getComptes()) {
 			if (ann.getNum_Etu().equals(num_Etu)){
 				return ann;
 			}
 		}
 		return null;
 	}
-	public void changeCompte(String num_Etu,String password, String pseudo){
-		for(Utilisateur ann : this.getCompte()) {
+	
+	//Méthode permettant de changer les paramètres d'un compte utilisateur
+	public void changeCompte(String num_Etu,String password, String pseudo) throws ClassNotFoundException{
+		for(Utilisateur ann : this.getComptes()) {
 			if (ann.getNum_Etu().equals(num_Etu)){
 				ann.setPassword(password);
 				ann.setPseudo(pseudo);
+				this.deleteCompte(num_Etu);
+				this.addCompte(ann);
+				try {
+					sauvegarde();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 	}
+	
+	//Méthode permettant l'affichage d'un compte utilisateur
 	public void affiche(){
 		System.out.println("Nombre comptes : " +getComptes().size());
-		for (Utilisateur u: this.getCompte() ){
+		for (Utilisateur u: this.getComptes() ){
 			System.out.println(u);
 		}
 	}
-	
+
+	//Méthode permettant d'enregistrer les comptes utilisateurs
 	public void sauvegarde() throws IOException{
 		String userHome = System.getProperty("user.home");
-		File fichier =  new File(userHome+"/Desktop/Projet_INFO742/saveUnivBDD.txt");
+		File fichier =  new File(userHome+"/Desktop/Projet_INFO742/UnivBDD/UnivBDD.txt");
 
-		 // ouverture d'un flux sur un fichier
 		ObjectOutputStream oos =  new ObjectOutputStream(new FileOutputStream(fichier)) ;
 
-		 // sérialization de l'objet
-		oos.writeObject(this) ;
+		// sérialization de l'objet
+	    oos.writeObject(comptes);
+	    oos.flush();
 	}
-	
-	public UnivBDD update() throws FileNotFoundException, IOException, ClassNotFoundException{
 
+	//Méthode permettant de lire les comptes enregistrés dans les fichiers de l'ordinateur
+	public void update() throws FileNotFoundException, IOException, ClassNotFoundException{
 
 		// dans une méthode main
-		 // on simplifie le code en retirant la gestion des exceptions
+		// on simplifie le code en retirant la gestion des exceptions
 		String userHome = System.getProperty("user.home");
-		File fichier =  new File(userHome+"/Desktop/Projet_INFO742/saveUnivBDD.txt");
+		File fichier =  new File(userHome+"/Desktop/Projet_INFO742/UnivBDD/UnivBDD.txt");
 
-		 // ouverture d'un flux sur un fichier
+		// ouverture d'un flux sur un fichier
 		ObjectInputStream ois =  new ObjectInputStream(new FileInputStream(fichier)) ;
-				
-		 // désérialization de l'objet
-		UnivBDD m = (UnivBDD)ois.readObject() ;
-		return m;
 
-		 // fermeture du flux dans le bloc finally
+		// désérialization de l'objet
+		CopyOnWriteArrayList<Utilisateur> m = (CopyOnWriteArrayList<Utilisateur>)ois.readObject();
+		comptes = m;
 	}
 
+	//Méthode permettant de vérifier que le compte qui essai de se connecter existe bien
 	public static boolean connect(String num_Etu, String password) {
 		// TODO Auto-generated method stub
 		boolean bool = false;
-		for (Utilisateur s : getComptes()) {
-		    if ((s.getNum_Etu().equals(num_Etu)) && (s.getPassword().equals(password))) {
-		    	bool = true;
-		    }
+		for (Utilisateur s : comptes) {
+			if ((s.getNum_Etu().equals(num_Etu)) && (s.getPassword().equals(password))) {
+				bool = true;
+				Historique.getInstance().connexion(num_Etu);
+			}
 		}
 		return bool;
 	}
 
-	public static CopyOnWriteArrayList<Utilisateur> getComptes() {
-		return comptes;
-	}
-
-	public static void setComptes(CopyOnWriteArrayList<Utilisateur> comptes) {
-		UnivBDD.comptes = comptes;
+	public void setComptes(CopyOnWriteArrayList<Utilisateur> comptes) {
+		this.comptes = comptes;
 	}
 }
