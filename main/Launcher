@@ -1,31 +1,24 @@
 package main;
 
-import java.awt.EventQueue;
 import java.io.IOException;
 
 import Installation.Setup;
-import vue.ConnexionFrame;
+import vue.GestionFenetre;
+import vue.Action;
+
+/*Le Launcher permet de lancer l'initialisation des valeurs ainsi 
+ * que l'ffichage de la partie graphique*/
 
 public class Launcher {
 	
 	public static void main(String[] args) {
-		try {
-			Setup.main(null);
-		} catch (ClassNotFoundException | IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					ConnexionFrame frame = new ConnexionFrame();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+			try {
+				Setup.main(null);
+			} catch (ClassNotFoundException | IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-		});
-	}
-
+			Action action= new Action();
+			GestionFenetre fenetre=new GestionFenetre(action);
+}
 }
