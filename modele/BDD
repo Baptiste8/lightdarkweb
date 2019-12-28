@@ -7,73 +7,120 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import vue.GestionFenetre;
+
+/*La classe BDD permet de manipuler et d'enregistrer les annonces 
+ * faites par les utilisateurs*/
+
 public class BDD implements Serializable{
-	
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
-	
-	private  CopyOnWriteArrayList<Annonce> annonces;
-	
+
+	private static  CopyOnWriteArrayList<Annonce> annonces;
+	private static ArrayList<String[]> origine;
+
 	public BDD(){
 		annonces = new CopyOnWriteArrayList<Annonce> ();
+		origine = new ArrayList<String[]>();
 	};
-	
-	public CopyOnWriteArrayList<Annonce> getAnnonces(){
+
+	public static CopyOnWriteArrayList<Annonce> getAnnonces(){
 		return annonces;
 	}
-	
-	public void addAnnonce(Annonce ann){
-		this.getAnnonces().add(ann);
+
+	public static ArrayList<String[]> getOrigine(){
+		return origine;
 	}
-	
-	public void deleteAnnonce(String idAnnonce){
-		for (Annonce s : annonces) {
-		    if (s.getId().equals(idAnnonce)) {
-		    	annonces.remove(s);
-		    }
+
+	//Méthode permettant d'ajouter une annonce
+	public static void addAnnonce(Utilisateur utilisateur, Annonce ann){
+		getAnnonces().add(ann);
+		String[] list = {utilisateur.getNum_Etu(), ann.getId()};
+		getOrigine().add(list);
+		try {
+			sauvegarde();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
-	
-	public void changeAnnonce(String idAnnonce,String nvname, String nvdescription, float nvprix){
+
+	//Méthode permettant de supprimer une annonce
+	public void deleteAnnonce(Utilisateur utilisateur, String idAnnonce){
+		for (Annonce s : annonces) {
+			if (s.getId().equals(idAnnonce)) {
+				annonces.remove(s);
+				try {
+					sauvegarde();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	//Méthode permettant de changer le contenu d'une annonce
+	public void changeAnnonce(Utilisateur utilisateur, String idAnnonce,String nvname, String nvdescription, float nvprix){
 		for(Annonce ann : this.getAnnonces()) {
 			if (ann.getId().equals(idAnnonce)){
 				ann.setName(nvname);
 				ann.setDescription(nvdescription);
 				ann.setPrix(nvprix);
+				try {
+					sauvegarde();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 	}
-	
-	public void sauvegarde(String bdd) throws IOException{
-		String userHome = System.getProperty("user.home");
-		File fichier =  new File(userHome+"/Desktop/Projet_INFO742/"+bdd+".txt");
 
-		 // ouverture d'un flux sur un fichier
+	//Méthode permettant de sauvegarder les annonces
+	public static void sauvegarde() throws IOException{
+		String userHome = System.getProperty("user.home");
+		File fichier =  new File(userHome+"/Desktop/Projet_INFO742/BDD/BDD.txt");
+
+		// ouverture d'un flux sur un fichier
 		ObjectOutputStream oos =  new ObjectOutputStream(new FileOutputStream(fichier)) ;
 
-		 // sérialization de l'objet
-		oos.writeObject(this) ;
+		// sérialization de l'objet
+		oos.writeObject(annonces) ;
+
+		oos.close();
+	}
+
+	//Fonction permettant de lire le contenu de la base de donnée
+	public void update() throws FileNotFoundException, IOException, ClassNotFoundException{
+
+		String userHome = System.getProperty("user.home");
+		File fichier =  new File(userHome+"/Desktop/Projet_INFO742/BDD/BDD.txt");
+
+		// ouverture d'un flux sur un fichier
+		ObjectInputStream ois =  new ObjectInputStream(new FileInputStream(fichier)) ;
+
+		// désérialization de l'objet
+		CopyOnWriteArrayList<Annonce> m = (CopyOnWriteArrayList<Annonce>)ois.readObject() ;
+		this.annonces = m;
+	}
+	//Permet de génerer un nouvel id pour une nouvelle annonce
+	public static String generateID() {
+		// TODO Auto-generated method stub
+		return String.valueOf(annonces.size()+1);
 	}
 	
-	public BDD update(String bdd) throws FileNotFoundException, IOException, ClassNotFoundException{
-
-
-		// dans une méthode main
-		 // on simplifie le code en retirant la gestion des exceptions
-		String userHome = System.getProperty("user.home");
-		File fichier =  new File(userHome+"/Desktop/Projet_INFO742/"+bdd+".txt");
-
-		 // ouverture d'un flux sur un fichier
-		ObjectInputStream ois =  new ObjectInputStream(new FileInputStream(fichier)) ;
-				
-		 // désérialization de l'objet
-		BDD m = (BDD)ois.readObject() ;
-		return m;
-
-		 // fermeture du flux dans le bloc finally
+	//Permet de faire une recherche dans les annonces existantes
+	public static void reseach(String sentence) {
+		CopyOnWriteArrayList<Annonce> researchAnn = new CopyOnWriteArrayList<Annonce> ();
+		for(Annonce ann : BDD.getAnnonces()) {
+			if(ann.getName().contains(GestionFenetre.textField.getText())) {
+				researchAnn.add(ann);
+			}
+		}
+		annonces = researchAnn;
 	}
 }
